@@ -70,7 +70,8 @@ def errorcheck(mpts_params):
     else:
         out_path = mpts_params["out_path"]
         if not os.path.exists(out_path):
-            raise MPTSRunError("Output path named %s does not exist."%out_path)
+            os.makedirs(out_path,exist_ok = True)
+            #raise MPTSRunError("Output path named %s does not exist."%out_path)
         mpts_params["out_path"] = os.path.abspath(mpts_params["out_path"])
 
     #module_path
