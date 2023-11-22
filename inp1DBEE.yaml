@@ -1,0 +1,25 @@
+mpts:                     # mpts dictionary
+ libname : lib1D.txt      # input library file (located in inp_path)
+ inp_path : ./inp1D        # input directory
+ out_path : ./out1DBEE    # output directory
+ niter : 1000              # number of iterations for which main of MPTS is executed 
+ sleeptime : 1             # sleeptime between MPTS iterations.
+ initfile : lib1DN5.txt    # library file for initial batch (located in inp_path)
+ nextsize : 1              # next best candidate batch size
+ mliter : 40               # number of framework iterations.
+ module_path : ./mods      # directory where module files are stored
+ module_inppath : ./minps  # directory where module input files are stored
+ module_sim :              # simulation module dictionary
+  name : sim1D              # simulation module name for 1D complex example
+  inpname : siminp1D.yaml   # simulation module input file  for 1D complex example
+  vars : {}                 # dictionary to specify the arguments in simulation module input file (empty)   
+ module_anlys :            # analysis module dictionary
+  name : anlys1D            # analysis module name for 1D complex example
+  inpname : anlysinp1D.yaml # analysis module input file for 1D complex example
+  vars : {}                 # dictionary to specify the arguments in analysis module input file (empty)
+ module_ml :               # ml module dictionary
+  name : ml1D               # ml module name directory
+  inpname : mlinp1D.yaml    # ml module input file name
+  vars :                   # dictionary to specify the arguments in ml module input file
+    opt_technique : BEE    # exploration Bayesian strategy
+    initseed : 1            # initial seed (random seed for ML is initial seed plus ML iteration number)

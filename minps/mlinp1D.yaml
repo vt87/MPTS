@@ -1,0 +1,11 @@
+ml:                               #Refer sklearn to see the meaning of some of the parameters below
+ sm_model : "GPR"                 #Surrogate Model  
+ opt_technique : "EXPT"           #Bayesian optimization technique (EXPT,EXPR,BEE)
+ length_scale : 1.0               #Matern Kernel length_scale
+ nu : 2.5                         #Matern Kernel smoothness parameter
+ length_scale_bounds_low : 1e-5   #Matern Kernel lower length_scale_bound
+ length_scale_bounds_up  : 1e5    #Matern Kernel upper length_scale_bound
+ alpha : 1e-6                     #Value added to the diagonal of the kernel matrix during fitting
+ n_restarts_optimizer : 5         #Number of restarts for finding kernel's parameters
+ normalize_y : True               #Normalize the target value
+ rseed : 1                        #Seed value for reproducibility

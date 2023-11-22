@@ -1,0 +1,6 @@
+cand_name id desc_x Output
+c275 275 0.75 NA
+c1165 1165 9.65 NA
+c129 129 -0.71 NA
+c522 522 3.22 NA
+c241 241 0.41 NA
