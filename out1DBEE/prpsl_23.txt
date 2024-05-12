@@ -1,2 +1,0 @@
-desc_x Output id cand_name cand_path cand_status
-2.02 1.401579612347861 402 c402 /home/icsefs01/spec1084/software/MPTS/sims1D/c402 1

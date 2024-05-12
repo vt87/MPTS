@@ -1,2 +1,0 @@
-desc_x Output id cand_name
-1.33 NA 333 c333

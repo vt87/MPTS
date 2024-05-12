@@ -1,2 +1,0 @@
-desc_x Output id cand_name cand_path cand_status
-5.84 1.025929152321465 784 c784 /home/icsefs01/spec1084/software/MPTS/sims1D/c784 1
