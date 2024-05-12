@@ -244,14 +244,18 @@ def bee(model,Xpredict,next_batch_size,ymax,mlparams):
     mean  = mean[:,0]
     pix = np.zeros((len(mean),))
     eix = np.zeros((len(mean),))
-    for k in range(len(mean)):
-        s = std[k]
-        m = mean[k]
-        if s == 0.0:
-            eix[k] = 0.0
-        else:
-            z = (m - ymax)/s
-            eix[k] = (m - ymax)*norm.cdf(z) + s*norm.pdf(z)
+    #std[0] = 0.0
+    # for k in range(len(mean)):
+    #     s = std[k]
+    #     m = mean[k]
+    #     if s == 0.0:
+    #         eix[k] = 0.0
+    #     else:
+    #         z = (m - ymax)/s
+    #         eix[k] = (m - ymax)*norm.cdf(z) + s*norm.pdf(z)
+    #numpy where. Using the errstate function to suppress divide by 0 warnings
+    with np.errstate(divide='ignore'):
+        eix = np.where(std == 0.0,0.0,((mean-ymax)*norm.cdf((mean-ymax)/std)) + (std*norm.pdf((mean-ymax)/std)))
     idx = np.argpartition(eix, -next_batch_size)
     idx = idx[-next_batch_size:]
     return idx
