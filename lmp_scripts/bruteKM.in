@@ -1,0 +1,122 @@
+# -*- lammps -*-
+variable TFIX format TFIX %.10g
+variable PFIX format PFIX %.10g
+variable epsAB format epsAB %.10g
+variable epsAA format epsAA %.10g
+variable sigAB format sigAB %.10g
+variable sigAA format sigAA %.10g
+variable pAB format sigAB %.10g
+variable pAA format sigAA %.10g
+variable qAB format sigAB %.10g
+variable qAA format sigAA %.10g
+variable SEED format SEED %i    
+variable FREQ_RSMOM equal 5000  
+variable TAU equal 0.5     
+variable TUDUMP equal 100000
+variable TUDUMPPROD equal 10000
+variable TUTHERMO equal 1000
+variable STEPS_RUN1 equal 100000
+variable STEPS_RUN2 equal 2000000
+variable STEPS_RUN3 equal 200000
+
+####################
+# 1) INITALIZATION                            
+####################
+ 
+#units,atom_style
+units real
+atom_style angle
+
+#readdata
+read_data in.data
+
+###############################################
+# 2) SYSTEM DEFINITION                            
+###############################################
+
+#nonbonded
+pair_style tbsw
+pair_coeff 1 1 ${epsAA} ${sigAA} 7.049556277 0.6022245584 ${pAA} ${qAA} 1.8
+pair_coeff 2 2 ${epsAA} ${sigAA} 7.049556277 0.6022245584 ${pAA} ${qAA} 1.8
+pair_coeff 1 2 ${epsAB} ${sigAB} 7.049556277 0.6022245584 ${pAB} ${qAB} 1.8
+
+###############################################
+# 3) SIMULATION SETTINGS                            
+###############################################
+
+#compute
+variable ndens equal "atoms/vol"
+compute T all temp
+thermo ${TUTHERMO}
+thermo_style custom step pe ke etotal c_T press epair density vol lx v_ndens
+
+#timestep
+reset_timestep 0
+timestep ${TAU}
+
+#velocity
+velocity all create ${TFIX} ${SEED} mom yes rot yes dist gaussian
+
+#neigh
+neighbor 0.5 bin
+neigh_modify delay 0 every 1 check yes
+
+#dump
+dump atomTemp all xtc ${TUDUMP} traj.xtc
+dump_modify atomTemp precision 10000
+
+###############################################
+# 4) SIMULATION RUN_1                            
+###############################################
+
+#minimize
+minimize 0.0 1.0 ${STEPS_RUN1} ${STEPS_RUN1}
+
+###############################################
+# 5) MODIFIED SETTINGS RUN_2                            
+###############################################
+
+#timestep
+reset_timestep 0
+
+#neigh
+neigh_modify delay 0 every 1 check yes
+
+#fix
+fix momfix all momentum ${FREQ_RSMOM} linear 1 1 1
+fix 1npt all npt temp ${TFIX} ${TFIX} $(500*dt) iso ${PFIX} ${PFIX} $(2500*dt)
+
+###############################################
+# 6) SIMULATION RUN_2                            
+###############################################
+
+#run
+run ${STEPS_RUN2}
+unfix 1npt
+
+###############################################
+# 5) MODIFIED SETTINGS RUN_2                            
+###############################################
+
+#timestep
+reset_timestep 0
+
+#neigh
+neigh_modify delay 0 every 1 check yes
+
+#dump
+dump atomTemp2 all xtc ${TUDUMPPROD} trajfinal.xtc
+dump_modify atomTemp2 precision 10000
+
+#fix
+fix 1npt all npt temp ${TFIX} ${TFIX} $(500*dt) iso ${PFIX} ${PFIX} $(2500*dt)
+
+###############################################
+# 6) SIMULATION RUN_2                            
+###############################################
+
+#run
+run ${STEPS_RUN3}
+unfix 1npt
+
+write_data out.data

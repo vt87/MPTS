@@ -1,0 +1,10 @@
+anlys : 
+ OPstyle : OPSTEINHARDT_AG  #Steinhardt order parameteter for alternating gyroid 
+ anlyslogdir : ./simlog/test/Q6AGlog  #analysis log directory (set by MPTS)
+ qmavgFLAG : 0  # DO NOT CHANGE
+ dcstar : 0.75  #correlation cutoff 
+ epsstar : 8  # Minimum connections to treat a particle as a AG like
+ epsMAX : 18 # Maximum connections to treat a particle as a AG like
+ rcutnb : 3.0 #rcutoff to calculate local q6
+ Mq : 6  Mq as 6 represents analysis done using q6
+ Nprod : 10 #Number of frames for averaging 

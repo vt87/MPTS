@@ -1,0 +1,30 @@
+sim : 
+ sim_path : ./simsKM #simulation directory
+ simlogdir : ./simlog/test  #simulation log directory
+ simtmplname : simbruteKM  #Simulation template used by simulation module
+ submit_style : cluster  #submit simulations on cluster
+ pop : 6912  # total number of particles 
+ frac : 0.5  # fraction of A 
+ pause : 20   # Pause the system in between two job submissions
+ initndens : 0.85  #initial density
+ lmp_scripts : ["bruteKM.in"]  #lammps script used to run the simulation 
+ lmp_path : "/home/fs01/spec1084/software/MPTS/lmp_scripts"  #Directory containing lammps scripts (PROVIDE THE FULL PATH HERE)
+ lmp_exec : "/home/fs01/spec1084/software/lammps_AA_FEP_GNU_VT_SW2B/build/lmp"  #Directory containing lammps executable (PROVIDE THE FULL PATH HERE)
+ writetrj1 : False # Saving the initial configuration in lammpstrj
+ tol1 : auto   # tolerance used for making initial configuration in packmol
+ tolmargin1 : 0.8 # margin provided when tol1 is set to auto (DO NOT CHANGE)
+ job1_procs : 8  #number of processors per lammps simulation
+ clus : fe13  # type of queue (common or fe13)
+ lmp1_vars :  #variables to run lammps simulation for KM model
+  TFIX : 300.0
+  PFIX : 0.0
+  epsAA : 1.0
+  epsAB : 1.0
+  sigAA : 1.0
+  sigAB : 1.0
+  pAA : 4.0
+  pAB : 4.0
+  qAA : 0.0
+  qAB : 0.0
+  SEED : RANDOM
+  

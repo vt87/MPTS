@@ -42,6 +42,8 @@ def defaults(mpts_params):
         mpts_params["workpath"] = os.getcwd()
     if "sleeptime" not in mpts_params.keys():
         mpts_params["sleeptime"] = 60
+    if "cleanfiles" not in mpts_params.keys():
+        mpts_params["cleanfiles"] = True
     #print("Done....")
     #print("********************************************************************")
     return mpts_params
@@ -372,9 +374,17 @@ def run_mliter(mpts_params):
         if "initseed" in vardict.keys():
             vardict["rseed"] = vardict["initseed"] + iterid
         mpts_params["module_ml"]["pymodule"].main(libfile,curr_train_file,next_batch_size,next_batch_file,inp_file,vardict)
-        
-        #odict
+
+        #clean train files (keep the last two train files)
+        cleanfiles = mpts_params["cleanfiles"]
+        if cleanfiles and iterid > 1:
+            trainprevfile = "train_%d.txt"%(iterid-2)
+            if os.path.exists(trainprevfile):
+                os.remove(trainprevfile)
+
+        #odict, add simlogdir to be put into use for logging of simulations
         odict["iterid"] = iterid + 1
+
         return odict
 
 '''
@@ -394,6 +404,10 @@ def run_MPTSmain(mpts_params):
     iterid = odict["iterid"]
     prpslfile = odict["prpslfile"]
 
+    #add simlogdir and anlyslogdir
+    mpts_params["module_sim"]["vars"]["simlogdir"] = "%s/MLStg%s"%(out_path,iterid)
+    mpts_params["module_anlys"]["vars"]["anlyslogdir"] = "%s/MLStg%s"%(out_path,iterid)
+
     #runflag status
     if runflag == 1:
         print("All ML iterations finished.")
@@ -401,7 +415,7 @@ def run_MPTSmain(mpts_params):
         print("MPTS main is abrupty finished at ML iteration %s"%iterid)
     if runflag == 2:
         print("ML Iteration %s : Running simulaton module."%iterid)
-    
+        
         #submitting simulations
         batch_file = "%s/%s"%(out_path,prpslfile)
         inp_file = mpts_params["module_sim"]["inpfile"]
@@ -413,12 +427,13 @@ def run_MPTSmain(mpts_params):
             print("ML Iteration %s : Simulations still in progress."%iterid)
 
         #analyzing them
-        print("ML Iteration %s : Running analysis module."%iterid)
-        batch_file = "%s/%s"%(out_path,prpslfile)
-        inp_file = mpts_params["module_anlys"]["inpfile"]
-        vardict = mpts_params["module_anlys"]["vars"]
-        mpts_params["module_anlys"]["pymodule"].main(batch_file,inp_file,vardict)
-        print("ML Iteration %s : Analysis finished."%iterid)
+        if simflag == 1:
+            print("ML Iteration %s : Running analysis module."%iterid)
+            batch_file = "%s/%s"%(out_path,prpslfile)
+            inp_file = mpts_params["module_anlys"]["inpfile"]
+            vardict = mpts_params["module_anlys"]["vars"]
+            mpts_params["module_anlys"]["pymodule"].main(batch_file,inp_file,vardict)
+            print("ML Iteration %s : Analysis finished."%iterid)
         
     mpts_params["runflag"] = runflag
 

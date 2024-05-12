@@ -1,0 +1,2 @@
+desc_x Output id cand_name cand_path cand_status
+4.14 0.7729277944802216 614 c614 /home/icsefs01/spec1084/software/MPTS/sims1D/c614 1

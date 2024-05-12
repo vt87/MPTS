@@ -1,0 +1,26 @@
+mpts:                     # mpts dictionary
+ libname : lib.txt      # input library file (located in inp_path)
+ inp_path : ./inpKM        # input directory
+ out_path : ./outKMBEE    # output directory
+ #niter : 3000              # number of iterations for which main of MPTS is executed 
+ niter : 1              # number of iterations for which main of MPTS is executed 
+ sleeptime : 10             # sleeptime between MPTS iterations.
+ initfile : libN5.txt    # library file for initial batch (located in inp_path)
+ nextsize : 1           # next best candidate batch size
+ mliter : 20               # number of framework iterations.
+ module_path : ./modsKM    # directory where module files are stored
+ module_inppath : ./minpsKM  # directory where module input files are stored
+ cleanfiles : True #clean old train files when running MPTS to save disk space
+ module_sim :  # simulation module dictionary            
+  name : simKM  # simulation module name for KM system
+  inpname : siminpbruteKM.yaml  # simulation module input file for KM system
+  vars : {} # dictionary to specify the arguments in simulation module input file (empty)
+ module_anlys :  # analysis module dictionary          
+  name : anlysKM  # analysis module name for KM          
+  inpname : anlysinpKM.yaml # analysis module input file KM system
+  vars : {} # dictionary to specify the arguments in analysis module input file (empty)
+ module_ml : # ml module dictionary              
+  name : mlKM # ml module name for KM       
+  inpname : mlinpKM.yaml  # ml module input file name
+  vars :  # dictionary to specify the arguments in ml module input file                 
+    initseed : 1 # initial seed (random seed for ML is initial seed plus ML iteration number)   
